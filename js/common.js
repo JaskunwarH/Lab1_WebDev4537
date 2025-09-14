@@ -91,5 +91,3 @@ Note.prototype.remove = function () {
   this.textareaEl = null;
   this.removeBtnEl = null;
 };
-
-

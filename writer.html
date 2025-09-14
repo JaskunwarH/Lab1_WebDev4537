@@ -1,16 +1,28 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Writer</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Writer</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div id="article-and-button-container">
-        <div id="article-container">
-            <p>is simply dummy text</p>
-        </div>
-        <button>Remove</button>
-    </div>
-    <button>Add</button>
+  <!-- Timestamp -->
+  <div id="status">Stored at: --:--:--</div>
+
+  <!-- Notes container (JS will fill this) -->
+  <div id="notes-container"></div>
+
+  <!-- Add button -->
+  <button id="add-btn">Add</button>
+
+  <br>
+
+  <!-- Back button -->
+  <button id="back-btn"></button>
+
+  <script src="lang/messages/en/user.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/writer.js"></script>
 </body>
 </html>
