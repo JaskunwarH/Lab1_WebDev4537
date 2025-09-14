@@ -1,77 +1,79 @@
-// js/writer.js
+/*
+Jaskunwar Hunjan A01195757
+The code and comments in the file are written with the assistance of ChatGPT and Copilot.
+
+This file controls the writer.html page.
+It lets me add/remove notes, auto-saves all notes every 2 seconds,
+and shows the time they were last saved.
+*/
+
 "use strict";
 
 document.addEventListener("DOMContentLoaded", () => {
-  // DOM hooks
+  // --- Get references to page elements ---
   const statusEl = document.getElementById("status");
   const notesContainer = document.getElementById("notes-container");
   const addBtn = document.getElementById("add-btn");
 
-  // In-memory list of Note objects (not plain objects)
+  // Keep Note objects here (not plain {id,text})
   let notes = [];
 
-  // ---- helpers for this page ----
+  // --- Small helpers for this page ---
+
+  // Show the latest "stored at" time at the top
   function updateStoredAtLabel() {
     statusEl.textContent = `${MESSAGES.pages.writer.storedAtPrefix} ${formatTime(new Date())}`;
   }
 
+  // Turn Note objects into plain objects before saving to localStorage
   function toPlainObjects() {
-    // Convert Note instances to plain objects before saving
     return notes.map(n => ({ id: n.id, text: n.getText() }));
   }
 
+  // Save all notes right now and update the time label
   function saveNow() {
     saveNotes(toPlainObjects());
     updateStoredAtLabel();
   }
 
+  // Create a new Note, add it to the list, and render it on the page
   function addNewNote(initialText = "") {
-    const id = `n_${Date.now()}_${Math.random().toString(16).slice(2)}`; // simple unique id
+    // Simple unique id using time + random
+    const id = `n_${Date.now()}_${Math.random().toString(16).slice(2)}`;
     const note = new Note(id, initialText);
     notes.push(note);
     note.render(notesContainer, handleRemoveById);
   }
 
+  // Remove a note by id and save immediately (so reader page updates fast)
   function handleRemoveById(id) {
-    // Remove from array
     notes = notes.filter(n => n.id !== id);
-    // Save immediately (lab requires instant removal from storage)
     saveNow();
   }
 
-  // ---- initial load: restore notes from storage ----
-  const stored = loadNotes(); // array of {id, text}
-  stored.forEach(obj => addNewNote(obj.text)); // new ids are fine since we store by order, but keep id:
-  // If you prefer to preserve ids:
-  // stored.forEach(obj => {
-  //   const note = new Note(obj.id, obj.text);
-  //   notes.push(note);
-  //   note.render(notesContainer, handleRemoveById);
-  // });
+  // --- Load any saved notes on page start ---
+  const stored = loadNotes(); // array like [{id, text}, ...]
+  // Simple approach: recreate notes from text (ids change, which is fine here)
+  stored.forEach(obj => addNewNote(obj.text));
 
-  // ---- add button ----
-  addBtn.textContent = MESSAGES.pages.writer.add;
+  // --- Add button setup ---
+  addBtn.textContent = MESSAGES.pages.writer.add; // label from user.js
   addBtn.addEventListener("click", () => {
-    addNewNote("");
-    // Don't save immediately; autosave will catch it, which meets the spec.
+    addNewNote(""); // new empty note
+    // No need to save right away; autosave runs every 2 seconds.
   });
 
+  // --- Back button setup ---
   const backBtn = document.getElementById("back-btn");
   backBtn.textContent = MESSAGES.pages.writer.back;
   backBtn.addEventListener("click", () => {
     location.href = "index.html";
   });
 
+  // --- Autosave timer ---
+  updateStoredAtLabel(); // show an initial time
+  const timerId = setInterval(saveNow, 2000); // save every 2 seconds (per lab requirement)
 
-  // ---- autosave every 2 seconds ----
-  updateStoredAtLabel(); // show initial time
-  const timerId = setInterval(saveNow, 2000);
-
-  // ---- set static labels from messages ----
-  // (The remove labels are already set in Note.render)
-  // Back button text if you want to set it via JS (optional):
-  // document.querySelector('button[onclick*="index.html"]').textContent = MESSAGES.pages.writer.back;
-
-  // Clean up timer if page is ever unloaded
+  // Stop the timer if the page is closing
   window.addEventListener("beforeunload", () => clearInterval(timerId));
 });

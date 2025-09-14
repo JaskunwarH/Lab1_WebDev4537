@@ -1,10 +1,18 @@
-// js/common.js
-// Small utilities that both writer and reader need.
+/*
+Jaskunwar Hunjan A01195757
+The code and comments in the file are written with the assistance of ChatGPT and Copilot.
+
+This file holds shared code used by both writer.js and reader.js.
+It includes helper functions for localStorage, a time formatter,
+and the Note object constructor for creating and managing notes.
+*/
 
 "use strict";
 
-// Read array of note objects from localStorage.
-// Returns [] if nothing is stored or if JSON is invalid.
+/* Load notes from localStorage
+   - Reads the saved JSON string
+   - Returns an array of note objects
+   - If nothing saved or invalid, returns an empty array */
 function loadNotes() {
   const raw = localStorage.getItem(MESSAGES.storage.key);
   if (!raw) return [];
@@ -16,30 +24,29 @@ function loadNotes() {
   }
 }
 
-// Save an array of plain note objects to localStorage.
+/* Save notes to localStorage
+   - Takes an array of plain objects {id, text}
+   - Converts it to a JSON string and saves */
 function saveNotes(notesArray) {
   localStorage.setItem(MESSAGES.storage.key, JSON.stringify(notesArray));
 }
 
-// Convert a Date to "HH:MM:SS" (24h) for the labels.
+/* Format a Date object as HH:MM:SS
+   - Used for showing "stored at" or "updated at" times */
 function formatTime(d) {
   const pad = (n) => String(n).padStart(2, "0");
   return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
 
-/*
- * -------- Object Constructor (old JS OOP) --------
- * Each Note has:
- *   - id:   unique string
- *   - text: current content
- *   - dom:  references to its textarea and remove button (set in render)
- *
- * Methods:
- *   - render(container, onRemove): create textarea + remove button, attach to DOM
- *   - getText(): read current textarea value
- *   - setText(v): set textarea value
- *   - remove(): remove its DOM nodes (caller also updates storage)
- */
+/* 
+ Note object constructor
+ - Each note has an id, text, and references to its DOM elements
+ - Methods:
+   render(container, onRemove) → create textarea + remove button in the page
+   getText() → get current textarea value
+   setText(v) → set textarea value
+   remove() → remove its DOM elements
+*/
 function Note(id, text) {
   this.id = id;
   this.text = text;
@@ -48,27 +55,32 @@ function Note(id, text) {
 }
 
 Note.prototype.render = function (container, onRemove) {
-  // wrapper keeps textarea and button together
+  // Create wrapper for textarea + button
   const wrap = document.createElement("div");
 
+  // Create textarea for note content
   const ta = document.createElement("textarea");
   ta.value = this.text;
   ta.rows = 3;
 
+  // Create remove button
   const btn = document.createElement("button");
   btn.type = "button";
   btn.textContent = MESSAGES.pages.writer.remove;
 
-  // Keep references so other methods can use them
+  // Save references for later use
   this.textareaEl = ta;
   this.removeBtnEl = btn;
 
-  // Remove calls the provided callback with this note's id
+  // When remove button is clicked:
+  // - remove from DOM
+  // - call callback so page logic can update storage
   btn.addEventListener("click", () => {
     this.remove();
     if (typeof onRemove === "function") onRemove(this.id);
   });
 
+  // Add textarea and button to the wrapper, then to the page
   wrap.appendChild(ta);
   wrap.appendChild(btn);
   container.appendChild(wrap);
@@ -84,12 +96,10 @@ Note.prototype.setText = function (v) {
 };
 
 Note.prototype.remove = function () {
-  // Remove the wrapper (textarea's parent) from the DOM if present
+  // Remove the wrapper element from the page
   if (this.textareaEl && this.textareaEl.parentElement) {
     this.textareaEl.parentElement.remove();
   }
   this.textareaEl = null;
   this.removeBtnEl = null;
 };
-
-

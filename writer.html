@@ -1,3 +1,12 @@
+<!-- 
+Jaskunwar Hunjan A01195757
+The code and comments in the file are written with the assistance of ChatGPT and Copilot.
+
+This is the writer page.
+It lets me add new notes, edit or delete them,
+and auto-saves the notes into localStorage every 2 seconds.
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,20 +16,21 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <!-- Timestamp -->
+  <!-- Status label shows "stored at" time -->
   <div id="status">Stored at: --:--:--</div>
 
-  <!-- Notes container (JS will fill this) -->
+  <!-- Notes will be added here by writer.js -->
   <div id="notes-container"></div>
 
-  <!-- Add button -->
+  <!-- Button to add a new note -->
   <button id="add-btn">Add</button>
 
   <br>
 
-  <!-- Back button -->
+  <!-- Back button returns to index.html -->
   <button id="back-btn"></button>
 
+  <!-- Scripts for messages, shared code, and writer logic -->
   <script src="lang/messages/en/user.js"></script>
   <script src="js/script.js"></script>
   <script src="js/writer.js"></script>

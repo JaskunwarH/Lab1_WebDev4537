@@ -1,26 +1,34 @@
-/* Apply to all pages */
+/*
+Jaskunwar Hunjan A01195757
+The code and comments in the file are written with the assistance of ChatGPT and Copilot.
+
+This file contains styles for all three pages (index, writer, reader).
+It centers content, styles text areas, and makes buttons easier to see and click.
+*/
+
+/* Basic page layout for all pages */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
-  min-height: 100vh;              /* take full screen height */
+  min-height: 100vh;              /* stretch to full window height */
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;    /* stack content from the top */
+  flex-direction: column;         /* stack elements vertically */
+  justify-content: flex-start;    /* content starts from the top */
   align-items: center;            /* center horizontally */
-  background-color: #cffff7;
+  background-color: #cffff7;      /* light background */
   color: #333;
   padding: 20px;
   box-sizing: border-box;
 }
 
-/* Headings */
+/* Main headings */
 h1 {
   font-size: 1.5rem;
   margin-bottom: 20px;
   text-align: center;
 }
 
-/* Status labels (stored at / updated at) */
+/* Status text like "stored at" or "updated at" */
 #status {
   font-size: 0.9rem;
   color: #555;
@@ -28,26 +36,26 @@ h1 {
   text-align: center;
 }
 
-/* Notes container */
+/* Container that holds all notes */
 #notes-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 10px;              /* space between notes */
   margin-bottom: 20px;
   width: 100%;
-  max-width: 500px;   /* keeps notes nicely narrow and centered */
+  max-width: 500px;       /* keeps notes from being too wide */
 }
 
-/* Each note row: textarea + remove button side by side */
+/* Each note row contains a textarea and remove button side by side */
 #notes-container div {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-/* Textareas for notes */
+/* The textarea where the note text is typed */
 #notes-container textarea {
-  flex: 1;                       /* take remaining space */
+  flex: 1;                       /* fill space in the row */
   padding: 8px;
   background-color: #eaeaea;
   border: 1px solid #000000;
@@ -57,40 +65,44 @@ h1 {
   box-sizing: border-box;
 }
 
-/* Buttons */
-/* Buttons */
+/* General button styles */
 button {
-  padding: 12px 20px;       /* more space inside */
+  padding: 12px 20px;       /* makes buttons larger */
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-size: 1.1rem;        /* larger text */
   border: 1px solid #000000;
-  min-width: 60px;         /* ensures all buttons have a decent width */
+  min-width: 60px;          /* ensures small buttons aren’t too tiny */
 }
 
-
-/* Add button */
-#add-btn,
-button[onclick*="index.html"] {
+/* Add button (writer page) */
+#add-btn {
   background-color: #4CAF50;
   color: white;
 }
 
-/* Back buttons */
-#back-btn,
-button[onclick*="index.html"] {
+/* Back button (writer/reader pages) */
+#back-btn {
   background-color: #4CAF50;
   color: white;
 }
 
-/* Remove buttons inside notes */
+/* Remove button inside each note row */
 #notes-container button {
   background-color: #e74c3c;
   color: white;
 }
 
-/* Hover effects */
+/* Index page navigation buttons: a bit larger and spaced */
+#writer-btn,
+#reader-btn {
+  font-size: 1.2rem;
+  padding: 14px 28px;
+  margin: 10px 0;
+}
+
+/* Slight change when hovering over any button */
 button:hover {
   opacity: 0.9;
 }

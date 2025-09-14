@@ -1,3 +1,12 @@
+<!-- 
+Jaskunwar Hunjan A01195757
+The code and comments in the file are written with the assistance of ChatGPT and Copilot.
+
+This is the reader page.
+It shows saved notes from localStorage, refreshes them every 2 seconds,
+and displays the last time they were updated.
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,16 +16,16 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <!-- Timestamp -->
+  <!-- Status label shows "updated at" time -->
   <div id="status">updated at: --:--:--</div>
 
-  <!-- Notes container -->
+  <!-- Notes will be added here by reader.js -->
   <div id="notes-container"></div>
 
-  <!-- Back button -->
+  <!-- Back button returns to index.html -->
   <button id="back-btn"></button>
 
-
+  <!-- Scripts for messages, shared code, and reader logic -->
   <script src="lang/messages/en/user.js"></script>
   <script src="js/script.js"></script>
   <script src="js/reader.js"></script>
