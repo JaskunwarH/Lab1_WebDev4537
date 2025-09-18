@@ -43,63 +43,74 @@ function formatTime(d) {
  - Each note has an id, text, and references to its DOM elements
  - Methods:
    render(container, onRemove) → create textarea + remove button in the page
-   getText() → get current textarea value
-   setText(v) → set textarea value
-   remove() → remove its DOM elements
+   getText() = get current textarea value
+   setText(v) = set textarea value
+   remove() = remove its DOM elements
 */
-function Note(id, text) {
-  this.id = id;
-  this.text = text;
-  this.textareaEl = null;
-  this.removeBtnEl = null;
+
+// Note class
+class Note {
+  constructor(id, text) {
+    this.id = id;
+    this.text = text;
+    this.noteTextarea = null;
+    this.removeBtnEl = null;
+  }
+
+  render(container, onRemove) {
+    // Create wrapper for textarea + button
+    const wrap = document.createElement("div");
+
+
+    // Create textarea for note content
+    const textarea = document.createElement("textarea");
+    textarea.value = this.text;
+    textarea.rows = 3;
+
+    // Remove button
+    const removeButton = new Button(MESSAGES.pages.writer.remove, () => {
+      this.remove();
+      if (typeof onRemove === "function") onRemove(this.id);
+    }).element;
+
+
+    // Save references for later use
+    this.noteTextarea = textarea;
+    this.removeBtnEl = removeButton;
+
+    // Add textarea and button to the wrapper, then to the page
+    wrap.appendChild(textarea);
+    wrap.appendChild(removeButton);
+    container.appendChild(wrap);
+  }
+
+  getText() {
+    return this.noteTextarea ? this.noteTextarea.value : this.text;
+  }
+
+  setText(v) {
+    this.text = v;
+    if (this.noteTextarea) this.noteTextarea.value = v;
+  }
+
+  remove() {
+    // Remove the wrapper element from the page
+    if (this.noteTextarea && this.noteTextarea.parentElement) {
+      this.noteTextarea.parentElement.remove();
+    }
+    this.noteTextarea = null;
+    this.removeBtnEl = null;
+  }
 }
 
-Note.prototype.render = function (container, onRemove) {
-  // Create wrapper for textarea + button
-  const wrap = document.createElement("div");
-
-  // Create textarea for note content
-  const ta = document.createElement("textarea");
-  ta.value = this.text;
-  ta.rows = 3;
-
-  // Create remove button
-  const btn = document.createElement("button");
-  btn.type = "button";
-  btn.textContent = MESSAGES.pages.writer.remove;
-
-  // Save references for later use
-  this.textareaEl = ta;
-  this.removeBtnEl = btn;
-
-  // When remove button is clicked:
-  // - remove from DOM
-  // - call callback so page logic can update storage
-  btn.addEventListener("click", () => {
-    this.remove();
-    if (typeof onRemove === "function") onRemove(this.id);
-  });
-
-  // Add textarea and button to the wrapper, then to the page
-  wrap.appendChild(ta);
-  wrap.appendChild(btn);
-  container.appendChild(wrap);
-};
-
-Note.prototype.getText = function () {
-  return this.textareaEl ? this.textareaEl.value : this.text;
-};
-
-Note.prototype.setText = function (v) {
-  this.text = v;
-  if (this.textareaEl) this.textareaEl.value = v;
-};
-
-Note.prototype.remove = function () {
-  // Remove the wrapper element from the page
-  if (this.textareaEl && this.textareaEl.parentElement) {
-    this.textareaEl.parentElement.remove();
+// Button class for creating buttons
+class Button {
+  constructor(label, onClick) {
+    this.element = document.createElement("button");
+    this.element.type = "button";
+    this.element.textContent = label;
+    if (typeof onClick === "function") {
+      this.element.addEventListener("click", onClick);
+    }
   }
-  this.textareaEl = null;
-  this.removeBtnEl = null;
-};
+}

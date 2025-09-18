@@ -22,11 +22,11 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderNotesPlain(list) {
     notesContainer.innerHTML = ""; // clear old content
     list.forEach(n => {
-      const ta = document.createElement("textarea");
-      ta.value = n.text;
-      ta.rows = 3;
-      ta.readOnly = true;
-      notesContainer.appendChild(ta);
+      const textarea = document.createElement("textarea");
+      textarea.value = n.text;
+      textarea.rows = 3;
+      textarea.readOnly = true;
+      notesContainer.appendChild(textarea);
     });
   }
 
@@ -38,11 +38,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Back button setup
-  const backBtn = document.getElementById("back-btn");
-  backBtn.textContent = MESSAGES.pages.reader.back;
-  backBtn.addEventListener("click", () => {
+  const backBtnOld = document.getElementById("back-btn");
+  const backButton = new Button(MESSAGES.pages.reader.back, () => {
     location.href = "index.html";
-  });
+  }).element;
+  backBtnOld.replaceWith(backButton);
 
   // Start: refresh immediately, then every 2 seconds
   refreshFromStorage();

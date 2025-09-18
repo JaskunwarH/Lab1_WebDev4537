@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Get references to page elements ---
   const statusEl = document.getElementById("status");
   const notesContainer = document.getElementById("notes-container");
-  const addBtn = document.getElementById("add-btn");
+  const addBtnOld = document.getElementById("add-btn");
 
   // Keep Note objects here (not plain {id,text})
   let notes = [];
@@ -57,22 +57,21 @@ document.addEventListener("DOMContentLoaded", () => {
   stored.forEach(obj => addNewNote(obj.text));
 
   // --- Add button setup ---
-  addBtn.textContent = MESSAGES.pages.writer.add; // label from user.js
-  addBtn.addEventListener("click", () => {
+  const addButton = new Button(MESSAGES.pages.writer.add, () => {
     addNewNote(""); // new empty note
-    // No need to save right away; autosave runs every 2 seconds.
-  });
+  }).element;
+  addBtnOld.replaceWith(addButton);
 
   // --- Back button setup ---
-  const backBtn = document.getElementById("back-btn");
-  backBtn.textContent = MESSAGES.pages.writer.back;
-  backBtn.addEventListener("click", () => {
+  const backBtnOld = document.getElementById("back-btn");
+  const backButton = new Button(MESSAGES.pages.writer.back, () => {
     location.href = "index.html";
-  });
+  }).element;
+  backBtnOld.replaceWith(backButton);
 
   // --- Autosave timer ---
   updateStoredAtLabel(); // show an initial time
-  const timerId = setInterval(saveNow, 2000); // save every 2 seconds (per lab requirement)
+  const timerId = setInterval(saveNow, 2000); // save every 2 seconds
 
   // Stop the timer if the page is closing
   window.addEventListener("beforeunload", () => clearInterval(timerId));
